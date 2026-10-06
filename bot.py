@@ -502,22 +502,28 @@ def normalize_country_tokens(value):
     return [token for token in re.split(r"[^A-Za-z0-9]+", text) if token]
 
 
+def normalize_phone_digits(value):
+    if value is None:
+        return ""
+    digits = re.sub(r"\D", "", str(value))
+    if digits.startswith("00"):
+        digits = digits[2:]
+    elif digits.startswith("+"):
+        digits = digits[1:]
+    return digits
+
+
 def detect_country_from_prefix(raw_prefix):
     if raw_prefix is None:
         return None
-    prefix_text = str(raw_prefix).strip()
-    if not prefix_text:
+    digits = normalize_phone_digits(raw_prefix)
+    if not digits:
         return None
-    prefix_text = prefix_text.replace("+", "").replace("00", "")
-    if not prefix_text or not prefix_text.isdigit():
-        return None
-
-    for length in (2, 3, 1):
-        if length > len(prefix_text):
-            continue
-        candidate = prefix_text[:length]
-        if candidate in PREFIX_COUNTRY_MAP:
-            return PREFIX_COUNTRY_MAP[candidate]
+    for length in (3, 2, 1):
+        if len(digits) >= length:
+            candidate = digits[:length]
+            if candidate in PREFIX_COUNTRY_MAP:
+                return PREFIX_COUNTRY_MAP[candidate]
     return None
 
 
@@ -529,25 +535,32 @@ def detect_country_from_value(raw_value):
     if not raw_text:
         return None
 
-    for token in normalize_country_tokens(raw_text):
-        normalized = token.upper()
-        if normalized in COUNTRY_CODES:
-            return normalized
+    normalized = raw_text.upper()
+    if normalized in COUNTRY_CODES:
+        return normalized
 
-        candidate = token.lower()
+    for token in normalize_country_tokens(raw_text):
+        token_upper = token.upper()
+        if token_upper in COUNTRY_CODES:
+            return token_upper
+        token_lower = token.lower()
         for country_name, (country_code, _) in COUNTRY_MAP.items():
-            if candidate == country_name.lower() or candidate in country_name.lower().replace(" ", ""):
+            normalized_name = country_name.lower().replace(" ", "")
+            if token_lower == country_name.lower() or token_lower in normalized_name:
                 return country_code
 
-    digits_only = re.sub(r"\D", "", raw_text)
-    if digits_only:
-        return detect_country_from_prefix(digits_only)
+    prefix_guess = detect_country_from_prefix(raw_text)
+    if prefix_guess:
+        return prefix_guess
 
     return None
 
 
 def resolve_country_from_item(item):
-    explicit_field_names = [
+    if item is None:
+        return "UN"
+
+    explicit_fields = [
         "country_code",
         "countryCode",
         "countrycode",
@@ -556,19 +569,30 @@ def resolve_country_from_item(item):
         "country",
         "country_name",
         "countryName",
-        "code",
+        "country_id",
+        "countryId",
         "cc",
     ]
-
-    for field_name in explicit_field_names:
-        candidate = item.get(field_name)
-        resolved = detect_country_from_value(candidate)
+    for field_name in explicit_fields:
+        resolved = detect_country_from_value(item.get(field_name))
         if resolved:
             return resolved
 
-    for field_name in ["range", "rangeName", "range_name", "UID", "uid", "uid_range", "uidRange"]:
-        candidate = item.get(field_name)
-        resolved = detect_country_from_value(candidate)
+    range_fields = ["range", "rangeName", "range_name", "uid_range", "uidRange"]
+    for field_name in range_fields:
+        resolved = detect_country_from_value(item.get(field_name))
+        if resolved:
+            return resolved
+
+    prefix_fields = [
+        "prefix",
+        "prefix_code",
+        "country_prefix",
+        "number_prefix",
+        "mob_prefix",
+    ]
+    for field_name in prefix_fields:
+        resolved = detect_country_from_value(item.get(field_name))
         if resolved:
             return resolved
 
@@ -579,22 +603,16 @@ def resolve_country_from_item(item):
         or item.get("destination")
         or ""
     )
-    prefix_candidate = (
-        item.get("prefix")
-        or item.get("number_prefix")
-        or item.get("prefix_code")
-        or item.get("country_prefix")
-    )
-
-    if prefix_candidate:
-        resolved = detect_country_from_value(prefix_candidate)
+    if number_candidate:
+        resolved = detect_country_from_prefix(number_candidate)
         if resolved:
             return resolved
 
-    if number_candidate:
-        final_guess = detect_country_from_value(number_candidate)
-        if final_guess:
-            return final_guess
+    cli_candidate = item.get("cli") or item.get("senderCli") or item.get("platform") or item.get("sender")
+    if cli_candidate:
+        for token in normalize_country_tokens(cli_candidate):
+            if token.upper() in COUNTRY_CODES:
+                return token.upper()
 
     return "UN"
 
@@ -623,9 +641,11 @@ def format_item(item):
     ).upper().strip()
 
     country_code = resolve_country_from_item(item)
-    flag = COUNTRY_MAP.get(next((name for name, (code, _) in COUNTRY_MAP.items() if code == country_code), ""), ("UN", "🌍"))[1]
-    if country_code == "UN":
-        flag = "🌍"
+    flag = "🌍"
+    for name, (code, country_flag) in COUNTRY_MAP.items():
+        if code == country_code:
+            flag = country_flag
+            break
 
     if range_value and country_code == "UN":
         range_raw = range_value.strip()
@@ -635,10 +655,10 @@ def format_item(item):
             fallback_code = detect_country_from_value(range_raw)
             if fallback_code:
                 country_code = fallback_code
-                flag = COUNTRY_MAP.get(
-                    next((name for name, (code, _) in COUNTRY_MAP.items() if code == country_code), ""),
-                    (country_code, "🌍"),
-                )[1]
+                for name, (code, country_flag) in COUNTRY_MAP.items():
+                    if code == country_code:
+                        flag = country_flag
+                        break
 
     formatted_number = (
         f"{number_raw[:3]}XXX{number_raw[-4:]}"
