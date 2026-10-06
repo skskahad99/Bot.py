@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 SharkSMS Live OTP Forwarder Bot for Telegram
-=============================================
+==============================================
 API-only version: polls SharkSMS REST API and forwards new messages to Telegram.
 """
 
@@ -63,7 +63,7 @@ def load_processed():
                 return set(file.read().splitlines())
         return set()
     except Exception as error:
-        print(f"[Bot] âš ï¸ Could not load processed file: {error}")
+        print(f"[Bot] ⚠️ Could not load processed file: {error}")
         return set()
 
 
@@ -76,7 +76,7 @@ def save_processed(uid):
             with open(PROCESSED_FILE, "a", encoding="utf-8") as file:
                 file.write(f"{uid}\n")
         except Exception as error:
-            print(f"[Bot] âš ï¸ Could not save processed ID: {error}")
+            print(f"[Bot] ⚠️ Could not save processed ID: {error}")
 
 
 def get_item_uids(item):
@@ -144,200 +144,250 @@ def extract_otp(text):
 # COUNTRY & SERVICE MAPPINGS
 # ==============================================================================
 COUNTRY_MAP = {
-    "Venezuela": ("VE", "ðŸ‡»ðŸ‡ª"),
-    "Zimbabwe": ("ZW", "ðŸ‡¿ðŸ‡¼"),
-    "Switzerland": ("CH", "ðŸ‡¨ðŸ‡­"),
-    "Bolivia": ("BO", "ðŸ‡§ðŸ‡´"),
-    "Ivory Coast": ("CI", "ðŸ‡¨ðŸ‡®"),
-    "Guatemala": ("GT", "ðŸ‡¬ðŸ‡¹"),
-    "Vietnam": ("VN", "ðŸ‡»ðŸ‡³"),
-    "Afghanistan": ("AF", "ðŸ‡¦ðŸ‡«"),
-    "Albania": ("AL", "ðŸ‡¦ðŸ‡±"),
-    "Algeria": ("DZ", "ðŸ‡©ðŸ‡¿"),
-    "Andorra": ("AD", "ðŸ‡¦ðŸ‡©"),
-    "Angola": ("AO", "ðŸ‡¦ðŸ‡´"),
-    "Antigua and Barbuda": ("AG", "ðŸ‡¦ðŸ‡¬"),
-    "Argentina": ("AR", "ðŸ‡¦ðŸ‡·"),
-    "Armenia": ("AM", "ðŸ‡¦ðŸ‡²"),
-    "Australia": ("AU", "ðŸ‡¦ðŸ‡º"),
-    "Austria": ("AT", "ðŸ‡¦ðŸ‡¹"),
-    "Azerbaijan": ("AZ", "ðŸ‡¦ðŸ‡¿"),
-    "Bahamas": ("BS", "ðŸ‡§ðŸ‡¸"),
-    "Bahrain": ("BH", "ðŸ‡§ðŸ‡­"),
-    "Bangladesh": ("BD", "ðŸ‡§ðŸ‡©"),
-    "Barbados": ("BB", "ðŸ‡§ðŸ‡§"),
-    "Belarus": ("BY", "ðŸ‡§ðŸ‡¾"),
-    "Belgium": ("BE", "ðŸ‡§ðŸ‡ª"),
-    "Belize": ("BZ", "ðŸ‡§ðŸ‡¿"),
-    "Benin": ("BJ", "ðŸ‡§ðŸ‡¯"),
-    "Bhutan": ("BT", "ðŸ‡§ðŸ‡¹"),
-    "Bosnia and Herzegovina": ("BA", "ðŸ‡§ðŸ‡¦"),
-    "Botswana": ("BW", "ðŸ‡§ðŸ‡¼"),
-    "Brazil": ("BR", "ðŸ‡§ðŸ‡·"),
-    "Brunei": ("BN", "ðŸ‡§ðŸ‡³"),
-    "Bulgaria": ("BG", "ðŸ‡§ðŸ‡¬"),
-    "Burkina Faso": ("BF", "ðŸ‡§ðŸ‡«"),
-    "Burundi": ("BI", "ðŸ‡§ðŸ‡®"),
-    "Cabo Verde": ("CV", "ðŸ‡¨ðŸ‡»"),
-    "Cambodia": ("KH", "ðŸ‡°ðŸ‡­"),
-    "Cameroon": ("CM", "ðŸ‡¨ðŸ‡²"),
-    "Canada": ("CA", "ðŸ‡¨ðŸ‡¦"),
-    "Central African Republic": ("CF", "ðŸ‡¨ðŸ‡«"),
-    "Chad": ("TD", "ðŸ‡¹ðŸ‡©"),
-    "Chile": ("CL", "ðŸ‡¨ðŸ‡±"),
-    "China": ("CN", "ðŸ‡¨ðŸ‡³"),
-    "Colombia": ("CO", "ðŸ‡¨ðŸ‡´"),
-    "Comoros": ("KM", "ðŸ‡°ðŸ‡²"),
-    "Congo": ("CG", "ðŸ‡¨ðŸ‡¬"),
-    "Costa Rica": ("CR", "ðŸ‡¨ðŸ‡·"),
-    "Croatia": ("HR", "ðŸ‡­ðŸ‡·"),
-    "Cuba": ("CU", "ðŸ‡¨ðŸ‡º"),
-    "Cyprus": ("CY", "ðŸ‡¨ðŸ‡¾"),
-    "Czechia": ("CZ", "ðŸ‡¨ðŸ‡¿"),
-    "Denmark": ("DK", "ðŸ‡©ðŸ‡°"),
-    "Djibouti": ("DJ", "ðŸ‡©ðŸ‡¯"),
-    "Dominica": ("DM", "ðŸ‡©ðŸ‡²"),
-    "Dominican Republic": ("DO", "ðŸ‡©ðŸ‡´"),
-    "Ecuador": ("EC", "ðŸ‡ªðŸ‡¨"),
-    "Egypt": ("EG", "ðŸ‡ªðŸ‡¬"),
-    "El Salvador": ("SV", "ðŸ‡¸ðŸ‡»"),
-    "Equatorial Guinea": ("GQ", "ðŸ‡¬ðŸ‡¶"),
-    "Eritrea": ("ER", "ðŸ‡ªðŸ‡·"),
-    "Estonia": ("EE", "ðŸ‡ªðŸ‡ª"),
-    "Eswatini": ("SZ", "ðŸ‡¸ðŸ‡¿"),
-    "Ethiopia": ("ET", "ðŸ‡ªðŸ‡¹"),
-    "Fiji": ("FJ", "ðŸ‡«ðŸ‡¯"),
-    "Finland": ("FI", "ðŸ‡«ðŸ‡®"),
-    "France": ("FR", "ðŸ‡«ðŸ‡·"),
-    "Gabon": ("GA", "ðŸ‡¬ðŸ‡¦"),
-    "Gambia": ("GM", "ðŸ‡¬ðŸ‡²"),
-    "Georgia": ("GE", "ðŸ‡¬ðŸ‡ª"),
-    "Germany": ("DE", "ðŸ‡©ðŸ‡ª"),
-    "Ghana": ("GH", "ðŸ‡¬ðŸ‡­"),
-    "Greece": ("GR", "ðŸ‡¬ðŸ‡·"),
-    "Grenada": ("GD", "ðŸ‡¬ðŸ‡©"),
-    "Guinea": ("GN", "ðŸ‡¬ðŸ‡³"),
-    "Guinea-Bissau": ("GW", "ðŸ‡¬ðŸ‡¼"),
-    "Guyana": ("GY", "ðŸ‡¬ðŸ‡¾"),
-    "Haiti": ("HT", "ðŸ‡­ðŸ‡¹"),
-    "Honduras": ("HN", "ðŸ‡­ðŸ‡³"),
-    "Hungary": ("HU", "ðŸ‡­ðŸ‡º"),
-    "Iceland": ("IS", "ðŸ‡®ðŸ‡¸"),
-    "India": ("IN", "ðŸ‡®ðŸ‡³"),
-    "Indonesia": ("ID", "ðŸ‡®ðŸ‡©"),
-    "Iran": ("IR", "ðŸ‡®ðŸ‡·"),
-    "Iraq": ("IQ", "ðŸ‡®ðŸ‡¶"),
-    "Ireland": ("IE", "ðŸ‡®ðŸ‡ª"),
-    "Israel": ("IL", "ðŸ‡®ðŸ‡±"),
-    "Italy": ("IT", "ðŸ‡®ðŸ‡¹"),
-    "Jamaica": ("JM", "ðŸ‡¯ðŸ‡²"),
-    "Japan": ("JP", "ðŸ‡¯ðŸ‡µ"),
-    "Jordan": ("JO", "ðŸ‡¯ðŸ‡´"),
-    "Kazakhstan": ("KZ", "ðŸ‡°ðŸ‡¿"),
-    "Kenya": ("KE", "ðŸ‡°ðŸ‡ª"),
-    "Kiribati": ("KI", "ðŸ‡°ðŸ‡®"),
-    "Korea, North": ("KP", "ðŸ‡°ðŸ‡µ"),
-    "Korea, South": ("KR", "ðŸ‡°ðŸ‡·"),
-    "Kuwait": ("KW", "ðŸ‡°ðŸ‡¼"),
-    "Kyrgyzstan": ("KG", "ðŸ‡°ðŸ‡¬"),
-    "Laos": ("LA", "ðŸ‡±ðŸ‡¦"),
-    "Latvia": ("LV", "ðŸ‡±ðŸ‡»"),
-    "Lebanon": ("LB", "ðŸ‡±ðŸ‡§"),
-    "Lesotho": ("LS", "ðŸ‡±ðŸ‡¸"),
-    "Liberia": ("LR", "ðŸ‡±ðŸ‡·"),
-    "Libya": ("LY", "ðŸ‡±ðŸ‡¾"),
-    "Liechtenstein": ("LI", "ðŸ‡±ðŸ‡®"),
-    "Lithuania": ("LT", "ðŸ‡±ðŸ‡¹"),
-    "Luxembourg": ("LU", "ðŸ‡±ðŸ‡º"),
-    "Madagascar": ("MG", "ðŸ‡²ðŸ‡¬"),
-    "Malawi": ("MW", "ðŸ‡²ðŸ‡¼"),
-    "Malaysia": ("MY", "ðŸ‡²ðŸ‡¾"),
-    "Maldives": ("MV", "ðŸ‡²ðŸ‡»"),
-    "Mali": ("ML", "ðŸ‡²ðŸ‡±"),
-    "Malta": ("MT", "ðŸ‡²ðŸ‡¹"),
-    "Marshall Islands": ("MH", "ðŸ‡²ðŸ‡­"),
-    "Mauritania": ("MR", "ðŸ‡²ðŸ‡·"),
-    "Mauritius": ("MU", "ðŸ‡²ðŸ‡º"),
-    "Mexico": ("MX", "ðŸ‡²ðŸ‡½"),
-    "Micronesia": ("FM", "ðŸ‡«ðŸ‡²"),
-    "Moldova": ("MD", "ðŸ‡²ðŸ‡©"),
-    "Monaco": ("MC", "ðŸ‡²ðŸ‡¨"),
-    "Mongolia": ("MN", "ðŸ‡²ðŸ‡³"),
-    "Montenegro": ("ME", "ðŸ‡²ðŸ‡ª"),
-    "Morocco": ("MA", "ðŸ‡²ðŸ‡¦"),
-    "Mozambique": ("MZ", "ðŸ‡²ðŸ‡¿"),
-    "Myanmar": ("MM", "ðŸ‡²ðŸ‡²"),
-    "Namibia": ("NA", "ðŸ‡³ðŸ‡¦"),
-    "Nauru": ("NR", "ðŸ‡³ðŸ‡·"),
-    "Nepal": ("NP", "ðŸ‡³ðŸ‡µ"),
-    "Netherlands": ("NL", "ðŸ‡³ðŸ‡±"),
-    "New Zealand": ("NZ", "ðŸ‡³ðŸ‡¿"),
-    "Nicaragua": ("NI", "ðŸ‡³ðŸ‡®"),
-    "Niger": ("NE", "ðŸ‡³ðŸ‡ª"),
-    "Nigeria": ("NG", "ðŸ‡³ðŸ‡¬"),
-    "North Macedonia": ("MK", "ðŸ‡²ðŸ‡°"),
-    "Norway": ("NO", "ðŸ‡³ðŸ‡´"),
-    "Oman": ("OM", "ðŸ‡´ðŸ‡²"),
-    "Pakistan": ("PK", "ðŸ‡µðŸ‡°"),
-    "Palau": ("PW", "ðŸ‡µðŸ‡¼"),
-    "Panama": ("PA", "ðŸ‡µðŸ‡¦"),
-    "Papua New Guinea": ("PG", "ðŸ‡µðŸ‡¬"),
-    "Paraguay": ("PY", "ðŸ‡µðŸ‡¾"),
-    "Peru": ("PE", "ðŸ‡µðŸ‡ª"),
-    "Philippines": ("PH", "ðŸ‡µðŸ‡­"),
-    "Poland": ("PL", "ðŸ‡µðŸ‡±"),
-    "Portugal": ("PT", "ðŸ‡µðŸ‡¹"),
-    "Qatar": ("QA", "ðŸ‡¶ðŸ‡¦"),
-    "Romania": ("RO", "ðŸ‡·ðŸ‡´"),
-    "Russia": ("RU", "ðŸ‡·ðŸ‡º"),
-    "Rwanda": ("RW", "ðŸ‡·ðŸ‡¼"),
-    "Saint Kitts and Nevis": ("KN", "ðŸ‡°ðŸ‡³"),
-    "Saint Lucia": ("LC", "ðŸ‡±ðŸ‡¨"),
-    "Saint Vincent and the Grenadines": ("VC", "ðŸ‡»ðŸ‡¨"),
-    "Samoa": ("WS", "ðŸ‡¼ðŸ‡¸"),
-    "San Marino": ("SM", "ðŸ‡¸ðŸ‡²"),
-    "Sao Tome and Principe": ("ST", "ðŸ‡¸ðŸ‡¹"),
-    "Saudi Arabia": ("SA", "ðŸ‡¸ðŸ‡¦"),
-    "Senegal": ("SN", "ðŸ‡¸ðŸ‡³"),
-    "Serbia": ("RS", "ðŸ‡·ðŸ‡¸"),
-    "Seychelles": ("SC", "ðŸ‡¸ðŸ‡¨"),
-    "Sierra Leone": ("SL", "ðŸ‡¸ðŸ‡±"),
-    "Singapore": ("SG", "ðŸ‡¸ðŸ‡¬"),
-    "Slovakia": ("SK", "ðŸ‡¸ðŸ‡°"),
-    "Slovenia": ("SI", "ðŸ‡¸ðŸ‡®"),
-    "Solomon Islands": ("SB", "ðŸ‡¸ðŸ‡§"),
-    "Somalia": ("SO", "ðŸ‡¸ðŸ‡´"),
-    "South Africa": ("ZA", "ðŸ‡¿ðŸ‡¦"),
-    "South Sudan": ("SS", "ðŸ‡¸ðŸ‡¸"),
-    "Spain": ("ES", "ðŸ‡ªðŸ‡¸"),
-    "Sri Lanka": ("LK", "ðŸ‡±ðŸ‡°"),
-    "Sudan": ("SD", "ðŸ‡¸ðŸ‡©"),
-    "Suriname": ("SR", "ðŸ‡¸ðŸ‡·"),
-    "Sweden": ("SE", "ðŸ‡¸ðŸ‡ª"),
-    "Syria": ("SY", "ðŸ‡¸ðŸ‡¾"),
-    "Taiwan": ("TW", "ðŸ‡¹ðŸ‡¼"),
-    "Tajikistan": ("TJ", "ðŸ‡¹ðŸ‡¯"),
-    "Tanzania": ("TZ", "ðŸ‡¹ðŸ‡¿"),
-    "Thailand": ("TH", "ðŸ‡¹ðŸ‡­"),
-    "Timor-Leste": ("TL", "ðŸ‡¹ðŸ‡±"),
-    "Togo": ("TG", "ðŸ‡¹ðŸ‡¬"),
-    "Tonga": ("TO", "ðŸ‡¹ðŸ‡´"),
-    "Trinidad and Tobago": ("TT", "ðŸ‡¹ðŸ‡¹"),
-    "Tunisia": ("TN", "ðŸ‡¹ðŸ‡³"),
-    "Turkey": ("TR", "ðŸ‡¹ðŸ‡·"),
-    "Turkmenistan": ("TM", "ðŸ‡¹ðŸ‡²"),
-    "Tuvalu": ("TV", "ðŸ‡¹ðŸ‡»"),
-    "Uganda": ("UG", "ðŸ‡ºðŸ‡¬"),
-    "Ukraine": ("UA", "ðŸ‡ºðŸ‡¦"),
-    "United Arab Emirates": ("AE", "ðŸ‡¦ðŸ‡ª"),
-    "United Kingdom": ("GB", "ðŸ‡¬ðŸ‡§"),
-    "United States": ("US", "ðŸ‡ºðŸ‡¸"),
-    "Uruguay": ("UY", "ðŸ‡ºðŸ‡¾"),
-    "Uzbekistan": ("UZ", "ðŸ‡ºðŸ‡¿"),
-    "Vanuatu": ("VU", "ðŸ‡»ðŸ‡º"),
-    "Vatican City": ("VA", "ðŸ‡»ðŸ‡¦"),
-    "Yemen": ("YE", "ðŸ‡¾ðŸ‡ª"),
-    "Zambia": ("ZM", "ðŸ‡¿ðŸ‡²"),
+    "Venezuela": ("VE", "🇻🇪"),
+    "Zimbabwe": ("ZW", "🇿🇼"),
+    "Switzerland": ("CH", "🇨🇭"),
+    "Bolivia": ("BO", "🇧🇴"),
+    "Ivory Coast": ("CI", "🇨🇮"),
+    "Guatemala": ("GT", "🇬🇹"),
+    "Vietnam": ("VN", "🇻🇳"),
+    "Afghanistan": ("AF", "🇦🇫"),
+    "Albania": ("AL", "🇦🇱"),
+    "Algeria": ("DZ", "🇩🇿"),
+    "Andorra": ("AD", "🇦🇩"),
+    "Angola": ("AO", "🇦🇴"),
+    "Antigua and Barbuda": ("AG", "🇦🇬"),
+    "Argentina": ("AR", "🇦🇷"),
+    "Armenia": ("AM", "🇦🇲"),
+    "Australia": ("AU", "🇦🇺"),
+    "Austria": ("AT", "🇦🇹"),
+    "Azerbaijan": ("AZ", "🇦🇿"),
+    "Bahamas": ("BS", "🇧🇸"),
+    "Bahrain": ("BH", "🇧🇭"),
+    "Bangladesh": ("BD", "🇧🇩"),
+    "Barbados": ("BB", "🇧🇧"),
+    "Belarus": ("BY", "🇧🇾"),
+    "Belgium": ("BE", "🇧🇪"),
+    "Belize": ("BZ", "🇧🇿"),
+    "Benin": ("BJ", "🇧🇯"),
+    "Bhutan": ("BT", "🇧🇹"),
+    "Bosnia and Herzegovina": ("BA", "🇧🇦"),
+    "Botswana": ("BW", "🇧🇼"),
+    "Brazil": ("BR", "🇧🇷"),
+    "Brunei": ("BN", "🇧🇳"),
+    "Bulgaria": ("BG", "🇧🇬"),
+    "Burkina Faso": ("BF", "🇧🇫"),
+    "Burundi": ("BI", "🇧🇮"),
+    "Cabo Verde": ("CV", "🇨🇻"),
+    "Cambodia": ("KH", "🇰🇭"),
+    "Cameroon": ("CM", "🇨🇲"),
+    "Canada": ("CA", "🇨🇦"),
+    "Central African Republic": ("CF", "🇨🇫"),
+    "Chad": ("TD", "🇹🇩"),
+    "Chile": ("CL", "🇨🇱"),
+    "China": ("CN", "🇨🇳"),
+    "Colombia": ("CO", "🇨🇴"),
+    "Comoros": ("KM", "🇰🇲"),
+    "Congo": ("CG", "🇨🇬"),
+    "Costa Rica": ("CR", "🇨🇷"),
+    "Croatia": ("HR", "🇭🇷"),
+    "Cuba": ("CU", "🇨🇺"),
+    "Cyprus": ("CY", "🇨🇾"),
+    "Czechia": ("CZ", "🇨🇿"),
+    "Denmark": ("DK", "🇩🇰"),
+    "Djibouti": ("DJ", "🇩🇯"),
+    "Dominica": ("DM", "🇩🇲"),
+    "Dominican Republic": ("DO", "🇩🇴"),
+    "Ecuador": ("EC", "🇪🇨"),
+    "Egypt": ("EG", "🇪🇬"),
+    "El Salvador": ("SV", "🇸🇻"),
+    "Equatorial Guinea": ("GQ", "🇬🇶"),
+    "Eritrea": ("ER", "🇪🇷"),
+    "Estonia": ("EE", "🇪🇪"),
+    "Eswatini": ("SZ", "🇸🇿"),
+    "Ethiopia": ("ET", "🇪🇹"),
+    "Fiji": ("FJ", "🇫🇯"),
+    "Finland": ("FI", "🇫🇮"),
+    "France": ("FR", "🇫🇷"),
+    "Gabon": ("GA", "🇬🇦"),
+    "Gambia": ("GM", "🇬🇲"),
+    "Georgia": ("GE", "🇬🇪"),
+    "Germany": ("DE", "🇩🇪"),
+    "Ghana": ("GH", "🇬🇭"),
+    "Greece": ("GR", "🇬🇷"),
+    "Grenada": ("GD", "🇬🇩"),
+    "Guinea": ("GN", "🇬🇳"),
+    "Guinea-Bissau": ("GW", "🇬🇼"),
+    "Guyana": ("GY", "🇬🇾"),
+    "Haiti": ("HT", "🇭🇹"),
+    "Honduras": ("HN", "🇭🇳"),
+    "Hungary": ("HU", "🇭🇺"),
+    "Iceland": ("IS", "🇮🇸"),
+    "India": ("IN", "🇮🇳"),
+    "Indonesia": ("ID", "🇮🇩"),
+    "Iran": ("IR", "🇮🇷"),
+    "Iraq": ("IQ", "🇮🇶"),
+    "Ireland": ("IE", "🇮🇪"),
+    "Israel": ("IL", "🇮🇱"),
+    "Italy": ("IT", "🇮🇹"),
+    "Jamaica": ("JM", "🇯🇲"),
+    "Japan": ("JP", "🇯🇵"),
+    "Jordan": ("JO", "🇯🇴"),
+    "Kazakhstan": ("KZ", "🇰🇿"),
+    "Kenya": ("KE", "🇰🇪"),
+    "Kiribati": ("KI", "🇰🇮"),
+    "Korea, North": ("KP", "🇰🇵"),
+    "Korea, South": ("KR", "🇰🇷"),
+    "Kuwait": ("KW", "🇰🇼"),
+    "Kyrgyzstan": ("KG", "🇰🇬"),
+    "Laos": ("LA", "🇱🇦"),
+    "Latvia": ("LV", "🇱🇻"),
+    "Lebanon": ("LB", "🇱🇧"),
+    "Lesotho": ("LS", "🇱🇸"),
+    "Liberia": ("LR", "🇱🇷"),
+    "Libya": ("LY", "🇱🇾"),
+    "Liechtenstein": ("LI", "🇱🇮"),
+    "Lithuania": ("LT", "🇱🇹"),
+    "Luxembourg": ("LU", "🇱🇺"),
+    "Madagascar": ("MG", "🇲🇬"),
+    "Malawi": ("MW", "🇲🇼"),
+    "Malaysia": ("MY", "🇲🇾"),
+    "Maldives": ("MV", "🇲🇻"),
+    "Mali": ("ML", "🇲🇱"),
+    "Malta": ("MT", "🇲🇹"),
+    "Marshall Islands": ("MH", "🇲🇭"),
+    "Mauritania": ("MR", "🇲🇷"),
+    "Mauritius": ("MU", "🇲🇺"),
+    "Mexico": ("MX", "🇲🇽"),
+    "Micronesia": ("FM", "🇫🇲"),
+    "Moldova": ("MD", "🇲🇩"),
+    "Monaco": ("MC", "🇲🇨"),
+    "Mongolia": ("MN", "🇲🇳"),
+    "Montenegro": ("ME", "🇲🇪"),
+    "Morocco": ("MA", "🇲🇦"),
+    "Mozambique": ("MZ", "🇲🇿"),
+    "Myanmar": ("MM", "🇲🇲"),
+    "Namibia": ("NA", "🇳🇦"),
+    "Nauru": ("NR", "🇳🇷"),
+    "Nepal": ("NP", "🇳🇵"),
+    "Netherlands": ("NL", "🇳🇱"),
+    "New Zealand": ("NZ", "🇳🇿"),
+    "Nicaragua": ("NI", "🇳🇮"),
+    "Niger": ("NE", "🇳🇪"),
+    "Nigeria": ("NG", "🇳🇬"),
+    "North Macedonia": ("MK", "🇲🇰"),
+    "Norway": ("NO", "🇳🇴"),
+    "Oman": ("OM", "🇴🇲"),
+    "Pakistan": ("PK", "🇵🇰"),
+    "Palau": ("PW", "🇵🇼"),
+    "Panama": ("PA", "🇵🇦"),
+    "Papua New Guinea": ("PG", "🇵🇬"),
+    "Paraguay": ("PY", "🇵🇾"),
+    "Peru": ("PE", "🇵🇪"),
+    "Philippines": ("PH", "🇵🇭"),
+    "Poland": ("PL", "🇵🇱"),
+    "Portugal": ("PT", "🇵🇹"),
+    "Qatar": ("QA", "🇶🇦"),
+    "Romania": ("RO", "🇷🇴"),
+    "Russia": ("RU", "🇷🇺"),
+    "Rwanda": ("RW", "🇷🇼"),
+    "Saint Kitts and Nevis": ("KN", "🇰🇳"),
+    "Saint Lucia": ("LC", "🇱🇨"),
+    "Saint Vincent and the Grenadines": ("VC", "🇻🇨"),
+    "Samoa": ("WS", "🇼🇸"),
+    "San Marino": ("SM", "🇸🇲"),
+    "Sao Tome and Principe": ("ST", "🇸🇹"),
+    "Saudi Arabia": ("SA", "🇸🇦"),
+    "Senegal": ("SN", "🇸🇳"),
+    "Serbia": ("RS", "🇷🇸"),
+    "Seychelles": ("SC", "🇸🇨"),
+    "Sierra Leone": ("SL", "🇸🇱"),
+    "Singapore": ("SG", "🇸🇬"),
+    "Slovakia": ("SK", "🇸🇰"),
+    "Slovenia": ("SI", "🇸🇮"),
+    "Solomon Islands": ("SB", "🇸🇧"),
+    "Somalia": ("SO", "🇸🇴"),
+    "South Africa": ("ZA", "🇿🇦"),
+    "South Sudan": ("SS", "🇸🇸"),
+    "Spain": ("ES", "🇪🇸"),
+    "Sri Lanka": ("LK", "🇱🇰"),
+    "Sudan": ("SD", "🇸🇩"),
+    "Suriname": ("SR", "🇸🇷"),
+    "Sweden": ("SE", "🇸🇪"),
+    "Syria": ("SY", "🇸🇾"),
+    "Taiwan": ("TW", "🇹🇼"),
+    "Tajikistan": ("TJ", "🇹🇯"),
+    "Tanzania": ("TZ", "🇹🇿"),
+    "Thailand": ("TH", "🇹🇭"),
+    "Timor-Leste": ("TL", "🇹🇱"),
+    "Togo": ("TG", "🇹🇬"),
+    "Tonga": ("TO", "🇹🇴"),
+    "Trinidad and Tobago": ("TT", "🇹🇹"),
+    "Tunisia": ("TN", "🇹🇳"),
+    "Turkey": ("TR", "🇹🇷"),
+    "Turkmenistan": ("TM", "🇹🇲"),
+    "Tuvalu": ("TV", "🇹🇻"),
+    "Uganda": ("UG", "🇺🇬"),
+    "Ukraine": ("UA", "🇺🇦"),
+    "United Arab Emirates": ("AE", "🇦🇪"),
+    "United Kingdom": ("GB", "🇬🇧"),
+    "United States": ("US", "🇺🇸"),
+    "Uruguay": ("UY", "🇺🇾"),
+    "Uzbekistan": ("UZ", "🇺🇿"),
+    "Vanuatu": ("VU", "🇻🇺"),
+    "Vatican City": ("VA", "🇻🇦"),
+    "Yemen": ("YE", "🇾🇪"),
+    "Zambia": ("ZM", "🇿🇲"),
+}
+
+COUNTRY_CODES = {code.upper() for code, _ in COUNTRY_MAP.values()}
+PREFIX_COUNTRY_MAP = {
+    "1": "US",
+    "7": "RU",
+    "20": "EG",
+    "27": "ZA",
+    "30": "GR",
+    "31": "NL",
+    "32": "BE",
+    "33": "FR",
+    "34": "ES",
+    "36": "HU",
+    "39": "IT",
+    "40": "RO",
+    "41": "CH",
+    "43": "AT",
+    "44": "GB",
+    "45": "DK",
+    "46": "SE",
+    "47": "NO",
+    "48": "PL",
+    "49": "DE",
+    "51": "PE",
+    "52": "MX",
+    "53": "CU",
+    "54": "AR",
+    "55": "BR",
+    "56": "CL",
+    "57": "CO",
+    "58": "VE",
+    "60": "MY",
+    "61": "AU",
+    "62": "ID",
+    "63": "PH",
+    "64": "NZ",
+    "65": "SG",
+    "66": "TH",
+    "81": "JP",
+    "82": "KR",
+    "84": "VN",
+    "86": "CN",
+    "90": "TR",
+    "91": "IN",
+    "92": "PK",
+    "93": "AF",
+    "94": "IR",
+    "95": "MM",
+    "98": "IR",
 }
 
 FLAG_IDS = {
@@ -420,27 +470,133 @@ FLAG_IDS = {
 }
 
 SERVICE_MAP = [
-    (["WHATSAPP", "WS"], "5393189591773630465", "ðŸ’¬", "WS"),
-    (["FACEBOOK", "FB"], "5393310276059678201", "ðŸ‘¤", "FB"),
-    (["TELEGRAM"], "5364125616801073577", "âœˆï¸", "TG"),
-    (["GOOGLE", "GMAIL"], "5393197447268813836", "ðŸ”", "GG"),
-    (["INSTAGRAM"], "5393603871434099925", "ðŸ“¸", "IG"),
-    (["WECHAT"], "6113767082636087326", "ðŸŸ¢", "WC"),
-    (["TIKTOK"], "5393189789342123585", "ðŸŽµ", "TT"),
-    (["TWITTER", "X"], "5393608179286297620", "ðŸ¦", "TW"),
-    (["LINE"], "6244519961734156213", "ðŸ’š", "LN"),
-    (["VIBER"], "5463060437572528782", "ðŸ’œ", "VB"),
-    (["SIGNAL"], "6089079919856325971", "ðŸ”’", "SG"),
-    (["DISCORD"], "5300896830551254527", "ðŸŽ®", "DC"),
-    (["SNAPCHAT"], "5330248916224983855", "ðŸ‘»", "SC"),
-    (["MICROSOFT", "HOTMAIL"], "5979047775470358891", "ðŸªŸ", "MS"),
-    (["APPLE", "ICLOUD"], "5318795767454923927", "ðŸŽ", "AP"),
-    (["AMAZON"], "5323624199753842832", "ðŸ“¦", "AM"),
-    (["NETFLIX"], "5418026554422750284", "ðŸŽ¬", "NF"),
-    (["UBER"], "5298715455316303708", "ðŸš—", "UB"),
-    (["PAYPAL"], "5776103539872896061", "ðŸ’³", "PP"),
-    (["LINKEDIN"], "6224222994265279792", "ðŸ’¼", "LI"),
+    (["WHATSAPP", "WS"], "5393189591773630465", "💬", "WS"),
+    (["FACEBOOK", "FB"], "5393310276059678201", "📩", "FB"),
+    (["TELEGRAM"], "5364125616801073577", "✨", "TG"),
+    (["GOOGLE", "GMAIL"], "5393197447268813836", "🔍", "GG"),
+    (["INSTAGRAM"], "5393603871434099925", "📷", "IG"),
+    (["WECHAT"], "6113767082636087326", "💬", "WC"),
+    (["TIKTOK"], "5393189789342123585", "🎵", "TT"),
+    (["TWITTER", "X"], "5393608179286297620", "🐦", "TW"),
+    (["LINE"], "6244519961734156213", "💬", "LN"),
+    (["VIBER"], "5463060437572528782", "📞", "VB"),
+    (["SIGNAL"], "6089079919856325971", "📡", "SG"),
+    (["DISCORD"], "5300896830551254527", "💬", "DC"),
+    (["SNAPCHAT"], "5330248916224983855", "📸", "SC"),
+    (["MICROSOFT", "HOTMAIL"], "5979047775470358891", "💾", "MS"),
+    (["APPLE", "ICLOUD"], "5318795767454923927", "🍏", "AP"),
+    (["AMAZON"], "5323624199753842832", "🛍️", "AM"),
+    (["NETFLIX"], "5418026554422750284", "🎬", "NF"),
+    (["UBER"], "5298715455316303708", "🚖", "UB"),
+    (["PAYPAL"], "5776103539872896061", "💳", "PP"),
+    (["LINKEDIN"], "6224222994265279792", "💼", "LI"),
 ]
+
+
+def normalize_country_tokens(value):
+    if value is None:
+        return []
+    text = str(value).strip()
+    if not text:
+        return []
+    return [token for token in re.split(r"[^A-Za-z0-9]+", text) if token]
+
+
+def detect_country_from_prefix(raw_prefix):
+    if raw_prefix is None:
+        return None
+    prefix_text = str(raw_prefix).strip()
+    if not prefix_text:
+        return None
+    prefix_text = prefix_text.replace("+", "").replace("00", "")
+    if not prefix_text or not prefix_text.isdigit():
+        return None
+
+    for length in (2, 3, 1):
+        if length > len(prefix_text):
+            continue
+        candidate = prefix_text[:length]
+        if candidate in PREFIX_COUNTRY_MAP:
+            return PREFIX_COUNTRY_MAP[candidate]
+    return None
+
+
+def detect_country_from_value(raw_value):
+    if raw_value is None:
+        return None
+
+    raw_text = str(raw_value).strip()
+    if not raw_text:
+        return None
+
+    for token in normalize_country_tokens(raw_text):
+        normalized = token.upper()
+        if normalized in COUNTRY_CODES:
+            return normalized
+
+        candidate = token.lower()
+        for country_name, (country_code, _) in COUNTRY_MAP.items():
+            if candidate == country_name.lower() or candidate in country_name.lower().replace(" ", ""):
+                return country_code
+
+    digits_only = re.sub(r"\D", "", raw_text)
+    if digits_only:
+        return detect_country_from_prefix(digits_only)
+
+    return None
+
+
+def resolve_country_from_item(item):
+    explicit_field_names = [
+        "country_code",
+        "countryCode",
+        "countrycode",
+        "iso_code",
+        "isoCode",
+        "country",
+        "country_name",
+        "countryName",
+        "code",
+        "cc",
+    ]
+
+    for field_name in explicit_field_names:
+        candidate = item.get(field_name)
+        resolved = detect_country_from_value(candidate)
+        if resolved:
+            return resolved
+
+    for field_name in ["range", "rangeName", "range_name", "UID", "uid", "uid_range", "uidRange"]:
+        candidate = item.get(field_name)
+        resolved = detect_country_from_value(candidate)
+        if resolved:
+            return resolved
+
+    number_candidate = (
+        item.get("number")
+        or item.get("receivedNumber")
+        or item.get("num")
+        or item.get("destination")
+        or ""
+    )
+    prefix_candidate = (
+        item.get("prefix")
+        or item.get("number_prefix")
+        or item.get("prefix_code")
+        or item.get("country_prefix")
+    )
+
+    if prefix_candidate:
+        resolved = detect_country_from_value(prefix_candidate)
+        if resolved:
+            return resolved
+
+    if number_candidate:
+        final_guess = detect_country_from_value(number_candidate)
+        if final_guess:
+            return final_guess
+
+    return "UN"
 
 
 def format_item(item):
@@ -466,18 +622,23 @@ def format_item(item):
         or ""
     ).upper().strip()
 
-    country_name_raw = (
-        range_value.split("-")[0].strip()
-        if "-" in range_value
-        else range_value
-    )
-    country_code, flag = "UN", "ðŸŒ"
+    country_code = resolve_country_from_item(item)
+    flag = COUNTRY_MAP.get(next((name for name, (code, _) in COUNTRY_MAP.items() if code == country_code), ""), ("UN", "🌍"))[1]
+    if country_code == "UN":
+        flag = "🌍"
 
-    for name, (code, country_flag) in COUNTRY_MAP.items():
-        if name.lower() in country_name_raw.lower():
-            country_code = code
-            flag = country_flag
-            break
+    if range_value and country_code == "UN":
+        range_raw = range_value.strip()
+        if "-" in range_raw:
+            range_raw = range_raw.split("-")[0].strip()
+        if range_raw:
+            fallback_code = detect_country_from_value(range_raw)
+            if fallback_code:
+                country_code = fallback_code
+                flag = COUNTRY_MAP.get(
+                    next((name for name, (code, _) in COUNTRY_MAP.items() if code == country_code), ""),
+                    (country_code, "🌍"),
+                )[1]
 
     formatted_number = (
         f"{number_raw[:3]}XXX{number_raw[-4:]}"
@@ -487,7 +648,7 @@ def format_item(item):
 
     emoji_id, service_emoji, service_short = (
         "5462933547058749789",
-        "ðŸ‘¤",
+        "📩",
         "N/N",
     )
     for keywords, service_id, emoji, short_name in SERVICE_MAP:
@@ -604,7 +765,7 @@ def send_sms_to_telegram(row):
                         response_json = response.json()
                         if response_json.get("ok"):
                             print(
-                                f"[Bot] âœ… OTP dispatched successfully to "
+                                f"[Bot] ✅ OTP dispatched successfully to "
                                 f"{clean_chat_id}"
                             )
                             chat_success = True
@@ -612,7 +773,7 @@ def send_sms_to_telegram(row):
 
                         attempts += 1
                         description = response_json.get("description", "Unknown")
-                        print(f"[Bot] âŒ Telegram API error: {description}")
+                        print(f"[Bot] ❌ Telegram API error: {description}")
                         if "copy_text" in str(description):
                             payload["reply_markup"]["inline_keyboard"][0] = [
                                 {
@@ -625,18 +786,18 @@ def send_sms_to_telegram(row):
                             continue
                         time.sleep(2)
                     elif response.status_code == 429:
-                        print("[Bot] âš ï¸ Telegram flood control; waiting 2s")
+                        print("[Bot] ⚠️ Telegram flood control; waiting 2s")
                         time.sleep(2)
                     else:
                         attempts += 1
                         print(
-                            f"[Bot] âŒ Telegram HTTP {response.status_code}: "
+                            f"[Bot] ❌ Telegram HTTP {response.status_code}: "
                             f"{response.text[:200]}"
                         )
                         time.sleep(2)
                 except Exception as error:
                     attempts += 1
-                    print(f"[Bot] âŒ Send attempt {attempts} error: {error}")
+                    print(f"[Bot] ❌ Send attempt {attempts} error: {error}")
                     time.sleep(2)
 
             if not chat_success:
@@ -644,7 +805,7 @@ def send_sms_to_telegram(row):
 
         return overall_success
     except Exception as error:
-        print(f"[Bot] âŒ Format/send error: {error}")
+        print(f"[Bot] ❌ Format/send error: {error}")
         return False
 
 
@@ -665,7 +826,7 @@ def telegram_queue_worker():
                     or item.get("number")
                     or item.get("num")
                 )
-                print(f"[Bot] ðŸš€ Forwarded to Telegram: {number_display}")
+                print(f"[Bot] 🚀 Forwarded to Telegram: {number_display}")
                 for uid in uids:
                     save_processed(uid)
             else:
@@ -674,7 +835,7 @@ def telegram_queue_worker():
                     or item.get("number")
                     or item.get("num")
                 )
-                print(f"[Bot] âŒ Failed to forward: {number_display}")
+                print(f"[Bot] ❌ Failed to forward: {number_display}")
                 with file_lock:
                     for uid in uids:
                         processed_ids.discard(uid)
@@ -682,7 +843,7 @@ def telegram_queue_worker():
             msg_queue.task_done()
             time.sleep(0.05)
         except Exception as error:
-            print(f"[Bot] âŒ Worker error: {error}")
+            print(f"[Bot] ❌ Worker error: {error}")
             time.sleep(1)
 
 
@@ -691,9 +852,9 @@ def telegram_queue_worker():
 # ==============================================================================
 def run_rest_api_mode():
     """Poll the official SharkSMS REST API using a Bearer token."""
-    print("[Engine] âš¡ Starting SharkSMS REST API mode...")
+    print("[Engine] 🔧 Starting SharkSMS REST API mode...")
     print(
-        f"[Engine] ðŸ”‘ Bearer token: {SHARKSMS_API_TOKEN[:6]}..."
+        f"[Engine] 🧾 Bearer token: {SHARKSMS_API_TOKEN[:6]}..."
         f"{SHARKSMS_API_TOKEN[-4:] if len(SHARKSMS_API_TOKEN) > 10 else ''}"
     )
 
@@ -728,22 +889,22 @@ def run_rest_api_mode():
                     rows = []
                 process_incoming_rows(rows)
             elif response.status_code == 404 and active_url == endpoints[0]:
-                print("[Engine] â„¹ï¸ /messages returned 404; switching to /cdrs...")
+                print("[Engine] ℹ️ /messages returned 404; switching to /cdrs...")
                 active_url = endpoints[1]
                 continue
             elif response.status_code == 401:
-                print("[Engine] âŒ 401 Unauthorized: invalid API token")
+                print("[Engine] ❌ 401 Unauthorized: invalid API token")
                 time.sleep(10)
             elif response.status_code == 429:
-                print("[Engine] âš ï¸ Rate limit reached; backing off for 5s...")
+                print("[Engine] ⚠️ Rate limit reached; backing off for 5s...")
                 time.sleep(5)
             else:
                 print(
-                    f"[Engine] âš ï¸ SharkSMS API HTTP {response.status_code}: "
+                    f"[Engine] ⚠️ SharkSMS API HTTP {response.status_code}: "
                     f"{response.text[:150]}"
                 )
         except Exception as error:
-            print(f"[Engine] âš ï¸ Polling error: {error}")
+            print(f"[Engine] ⚠️ Polling error: {error}")
 
         time.sleep(POLL_INTERVAL)
 
@@ -771,14 +932,14 @@ def process_incoming_rows(records):
                 if number and len(number) > 5 and number != "0":
                     valid_rows.append(row)
         except Exception as error:
-            print(f"[Bot] âš ï¸ Row parse error: {error}")
+            print(f"[Bot] ⚠️ Row parse error: {error}")
 
     if not valid_rows:
         return
 
     if not INITIAL_SYNC_DONE:
         print(
-            f"[Bot] ðŸ”„ Initial sync: recording {len(valid_rows)} existing items..."
+            f"[Bot] 📈 Initial sync: recording {len(valid_rows)} existing items..."
         )
         for item in valid_rows:
             uids = get_item_uids(item)
@@ -794,17 +955,17 @@ def process_incoming_rows(records):
             or recent_item.get("num")
         )
         print(
-            f"[Bot] ðŸ§ª Sending latest SMS as startup test to Telegram: "
+            f"[Bot] 🧪 Sending latest SMS as startup test to Telegram: "
             f"{test_number}"
         )
 
         if send_sms_to_telegram(recent_item):
-            print(f"[Bot] âœ… Startup test delivered successfully â†’ {test_number}")
+            print(f"[Bot] ✅ Startup test delivered successfully → {test_number}")
         else:
-            print("[Bot] âš ï¸ Startup test failed to send.")
+            print("[Bot] ⚠️ Startup test failed to send.")
 
         INITIAL_SYNC_DONE = True
-        print("[Bot] ðŸŸ¢ Live OTP monitoring is active.")
+        print("[Bot] 🟢 Live OTP monitoring is active.")
     else:
         for item in valid_rows:
             uids = get_item_uids(item)
@@ -814,7 +975,7 @@ def process_incoming_rows(records):
                     or item.get("number")
                     or item.get("num")
                 )
-                print(f"[Bot] ðŸ†• New live OTP received â†’ {number_display}")
+                print(f"[Bot] 📥 New live OTP received → {number_display}")
 
                 for uid in uids:
                     processed_ids.add(uid)
@@ -829,7 +990,7 @@ def process_incoming_rows(records):
 # ==============================================================================
 def main():
     print("=" * 65)
-    print("ðŸ¦ˆ SharkSMS Telegram Live OTP Forwarder Bot")
+    print("📨 SharkSMS Telegram Live OTP Forwarder Bot")
     print("=" * 65)
 
     if not SHARKSMS_API_TOKEN or SHARKSMS_API_TOKEN.startswith("PASTE_"):
@@ -852,4 +1013,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\n[Bot] Exiting on user request...")
     except Exception as error:
-        print(f"[Bot] âŒ Fatal error: {error}")
+        print(f"[Bot] ❌ Fatal error: {error}")
